@@ -17,10 +17,15 @@ import java.util.List;
  */
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeViewHolder> {
 
-    private List<Recipe> recipes = new ArrayList<>(0);
+    private List<Recipe> mRecipes = new ArrayList<>(0);
+    private final OnRecipeClicked mOnRecipeClicked;
+
+    RecipesAdapter(OnRecipeClicked onRecipeClicked) {
+        this.mOnRecipeClicked = onRecipeClicked;
+    }
 
     public void setData(@NonNull List<Recipe> data) {
-        recipes = data;
+        mRecipes = data;
         notifyDataSetChanged();
     }
 
@@ -33,15 +38,15 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
 
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
-        holder.bind(recipes.get(position));
+        holder.bind(mRecipes.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return recipes.size();
+        return mRecipes.size();
     }
 
-    class RecipeViewHolder extends RecyclerView.ViewHolder {
+    class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         final TextView infoText;
 
@@ -52,8 +57,18 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
 
         void bind(Recipe recipe) {
             infoText.setText(recipe.getName());
+            itemView.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            mOnRecipeClicked.onRecipeClicked(mRecipes.get(getAdapterPosition()));
+        }
+
+    }
+
+    interface OnRecipeClicked {
+        void onRecipeClicked(Recipe recipe);
     }
 
 }
