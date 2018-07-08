@@ -36,7 +36,11 @@ public class RecipesRepository {
         Type recipesCollectionType = new TypeToken<Collection<Recipe>>(){}.getType();
 
         String jsonResponse = client.get(BASE_URL);
-        return parser.fromJson(jsonResponse, recipesCollectionType);
+        try {
+            return parser.fromJson(jsonResponse, recipesCollectionType);
+        } catch (Exception exception) {
+            throw new IOException(exception);
+        }
 
     }
 

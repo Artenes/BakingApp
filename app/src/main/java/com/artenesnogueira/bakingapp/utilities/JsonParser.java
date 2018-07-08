@@ -1,6 +1,7 @@
 package com.artenesnogueira.bakingapp.utilities;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
 
@@ -16,10 +17,14 @@ public class JsonParser {
      * @param type the type to parse to
      * @return the parsed object
      */
-    public <T> T fromJson(String json, Type type) {
+    public <T> T fromJson(String json, Type type) throws Exception {
 
-        Gson gson = new Gson();
-        return gson.fromJson(json, type);
+        try {
+            Gson gson = new Gson();
+            return gson.fromJson(json, type);
+        } catch (Exception exception) {
+            throw new Exception(exception);
+        }
 
     }
 
