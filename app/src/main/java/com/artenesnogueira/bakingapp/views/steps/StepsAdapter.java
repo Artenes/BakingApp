@@ -1,4 +1,4 @@
-package com.artenesnogueira.bakingapp.views;
+package com.artenesnogueira.bakingapp.views.steps;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +20,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
     private List<Step> mSteps = new ArrayList<>(0);
     private final OnStepClicked mOnStepClickedListener;
 
-    StepsAdapter(OnStepClicked onStepClickedListener) {
+    public StepsAdapter(OnStepClicked onStepClickedListener) {
         mOnStepClickedListener = onStepClickedListener;
     }
 
@@ -63,13 +63,13 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
 
         @Override
         public void onClick(View v) {
-            mOnStepClickedListener.onStepClicked(mSteps.get(getAdapterPosition()));
+            mOnStepClickedListener.onStepClicked(mSteps.get(getAdapterPosition()), getAdapterPosition());
         }
 
     }
 
-    interface OnStepClicked {
-        void onStepClicked(Step step);
+    public interface OnStepClicked {
+        void onStepClicked(Step step, int index);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.artenesnogueira.bakingapp.views;
+package com.artenesnogueira.bakingapp.views.recipes;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.artenesnogueira.bakingapp.R;
 import com.artenesnogueira.bakingapp.model.Recipe;
 import com.artenesnogueira.bakingapp.model.RecipesState;
+import com.artenesnogueira.bakingapp.views.steps.StepsActivity;
 
 /**
  * The view that displays the list of recipes.
@@ -57,7 +58,7 @@ public class RecipesActivity extends AppCompatActivity implements RecipesAdapter
 
     @Override
     public void onRecipeClicked(Recipe recipe) {
-        RecipeDetailsActivity.start(this, recipe);
+        StepsActivity.start(this, recipe);
     }
 
 }

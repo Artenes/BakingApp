@@ -1,4 +1,4 @@
-package com.artenesnogueira.bakingapp.views;
+package com.artenesnogueira.bakingapp.views.recipes;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +20,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
     private List<Recipe> mRecipes = new ArrayList<>(0);
     private final OnRecipeClicked mOnRecipeClicked;
 
-    RecipesAdapter(OnRecipeClicked onRecipeClicked) {
+    public RecipesAdapter(OnRecipeClicked onRecipeClicked) {
         this.mOnRecipeClicked = onRecipeClicked;
     }
 
@@ -67,7 +67,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
 
     }
 
-    interface OnRecipeClicked {
+    public interface OnRecipeClicked {
         void onRecipeClicked(Recipe recipe);
     }
 

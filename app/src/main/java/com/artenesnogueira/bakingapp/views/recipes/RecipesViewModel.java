@@ -1,4 +1,4 @@
-package com.artenesnogueira.bakingapp.views;
+package com.artenesnogueira.bakingapp.views.recipes;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * View model for the recipes view.
  */
-class RecipesViewModel extends ViewModel {
+public class RecipesViewModel extends ViewModel {
 
     private final MutableLiveData<RecipesState> mState;
 

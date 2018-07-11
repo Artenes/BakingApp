@@ -7,21 +7,23 @@ import android.support.annotation.NonNull;
 import com.artenesnogueira.bakingapp.model.Recipe;
 
 /**
- * Factory to create a new instace of RecipeDetailsViewModel.
+ * Factory to create a new instace of RecipeViewModel.
  */
 @SuppressWarnings("ALL")
-class RecipeDetailsViewModelFactory extends ViewModelProvider.NewInstanceFactory {
+public class RecipeViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
     private final Recipe mRecipe;
+    private final int mCurrentStepIndex;
 
-    RecipeDetailsViewModelFactory(Recipe mRecipe) {
-        this.mRecipe = mRecipe;
+    public RecipeViewModelFactory(Recipe recipe, int currentStepIndex) {
+        mRecipe = recipe;
+        mCurrentStepIndex = currentStepIndex;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new RecipeDetailsViewModel(mRecipe);
+        return (T) new RecipeViewModel(mRecipe, mCurrentStepIndex);
     }
 
 }

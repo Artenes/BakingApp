@@ -4,4 +4,4 @@
     android:id="@+id/recipes_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.RecipesActivity"/>
+    tools:context=".views.recipes.RecipesActivity"/>
