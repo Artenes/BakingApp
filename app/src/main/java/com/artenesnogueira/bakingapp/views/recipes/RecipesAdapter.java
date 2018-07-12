@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.artenesnogueira.bakingapp.R;
@@ -49,26 +50,39 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
     class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         final TextView infoText;
+        final Button btnAddToWidget;
 
         RecipeViewHolder(View itemView) {
             super(itemView);
             infoText = itemView.findViewById(R.id.info_text);
+            btnAddToWidget = itemView.findViewById(R.id.btn_add_to_widget);
         }
 
         void bind(Recipe recipe) {
             infoText.setText(recipe.getName());
             itemView.setOnClickListener(this);
+            btnAddToWidget.setOnClickListener(this);
         }
 
         @Override
-        public void onClick(View v) {
-            mOnRecipeClicked.onRecipeClicked(mRecipes.get(getAdapterPosition()));
+        public void onClick(View view) {
+            Recipe recipe = mRecipes.get(getAdapterPosition());
+            switch (view.getId()) {
+                case R.id.card_view:
+                    mOnRecipeClicked.onRecipeClicked(recipe);
+                    break;
+                case R.id.btn_add_to_widget:
+                    mOnRecipeClicked.onAddToWidgetClicked(recipe);
+                    break;
+            }
+
         }
 
     }
 
     public interface OnRecipeClicked {
         void onRecipeClicked(Recipe recipe);
+        void onAddToWidgetClicked(Recipe recipe);
     }
 
 }

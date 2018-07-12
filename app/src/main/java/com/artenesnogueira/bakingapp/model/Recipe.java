@@ -48,6 +48,15 @@ public class Recipe implements Parcelable {
         return image;
     }
 
+    /**
+     * Create a resumed version of this recipe
+     *
+     * @return
+     */
+    public ResumedRecipe createResumedRecipe() {
+        return new ResumedRecipe(id, name, ingredients);
+    }
+
     private Recipe(Parcel in) {
         id = in.readInt();
         name = in.readString();

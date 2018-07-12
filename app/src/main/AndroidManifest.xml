@@ -21,7 +21,21 @@
             </intent-filter>
         </activity>
         <activity android:name=".views.steps.StepsActivity" />
-        <activity android:name=".views.step_details.StepDetailsActivity"/>
+        <activity android:name=".views.step_details.StepDetailsActivity" />
+
+        <receiver android:name=".widget.IngredientsWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/ingredients_widget_info" />
+        </receiver>
+
+        <service android:name=".widget.IngredientsListViewService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+
     </application>
 
 </manifest>

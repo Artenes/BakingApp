@@ -61,4 +61,9 @@ public class RecipesActivity extends AppCompatActivity implements RecipesAdapter
         StepsActivity.start(this, recipe);
     }
 
+    @Override
+    public void onAddToWidgetClicked(Recipe recipe) {
+        mViewModel.setRecipeToWidget(recipe);
+    }
+
 }
