@@ -1,6 +1,7 @@
 package com.artenesnogueira.bakingapp.views.step_details;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,7 +15,9 @@ import android.widget.TextView;
 import com.artenesnogueira.bakingapp.R;
 import com.artenesnogueira.bakingapp.model.RecipeState;
 import com.artenesnogueira.bakingapp.model.Step;
+import com.artenesnogueira.bakingapp.views.PlayerViewModel;
 import com.artenesnogueira.bakingapp.views.RecipeViewModel;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 
 /**
  * Fragment to display the details of a step of a recipe
@@ -22,11 +25,14 @@ import com.artenesnogueira.bakingapp.views.RecipeViewModel;
 public class StepDetailsFragment extends Fragment implements View.OnClickListener {
 
     private static final String KEY_NAVIGATION_VISIBILITY = "NAVIGATION_VISIBILITY";
+    private static final String KEY_TWO_PANE_MODE = "TWO_PANE_MODE";
 
+    private SimpleExoPlayerView mPlayerView;
     private TextView mDescriptionTextView;
     private Button mNextButton;
     private Button mPreviousButton;
     private RecipeViewModel mViewModel;
+    private PlayerViewModel mPlayerViewModel;
 
     /**
      * Create a new instance of this fragment
@@ -34,10 +40,11 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
      * @param displayNavigation wheter the navigation buttons will be displayed or not
      * @return the new instance of this fragment
      */
-    public static StepDetailsFragment create(boolean displayNavigation) {
+    public static StepDetailsFragment create(boolean displayNavigation, boolean inTwoPaneMode) {
         int visibility = displayNavigation ? View.VISIBLE : View.GONE;
         Bundle bundle = new Bundle();
         bundle.putInt(KEY_NAVIGATION_VISIBILITY, visibility);
+        bundle.putBoolean(KEY_TWO_PANE_MODE, inTwoPaneMode);
         StepDetailsFragment fragment = new StepDetailsFragment();
         fragment.setArguments(bundle);
         return fragment;
@@ -46,19 +53,24 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_step_details, container, false);
+        //must be sure about how this mLayout will behave
+        int layout = isInTwoPaneMode() ? R.layout.fragment_step_details_protrait : R.layout.fragment_step_details;
+        View view = inflater.inflate(layout, container, false);
 
+        mPlayerView = view.findViewById(R.id.player);
         mDescriptionTextView = view.findViewById(R.id.tv_description);
         mNextButton = view.findViewById(R.id.btn_next);
         mPreviousButton = view.findViewById(R.id.btn_previous);
 
-        mNextButton.setOnClickListener(this);
-        mPreviousButton.setOnClickListener(this);
+        if (mNextButton != null && mPreviousButton != null) {
+            mNextButton.setOnClickListener(this);
+            mPreviousButton.setOnClickListener(this);
 
-        //this can throw an exception if not available
-        int visibility = getNavigationVisibility();
-        mNextButton.setVisibility(visibility);
-        mPreviousButton.setVisibility(visibility);
+            //this can throw an exception if not available
+            int visibility = getNavigationVisibility();
+            mNextButton.setVisibility(visibility);
+            mPreviousButton.setVisibility(visibility);
+        }
 
         return view;
     }
@@ -72,10 +84,19 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
         try {
             mViewModel = ViewModelProviders.of(getActivity()).get(RecipeViewModel.class);
             mViewModel.getState().observe(this, this::render);
-        } catch (RuntimeException exception) {
-            throw new RuntimeException("Create an instance of RecipeViewModel to use this fragment", exception);
-        }
 
+            mPlayerViewModel = ViewModelProviders.of(getActivity()).get(PlayerViewModel.class);
+            mPlayerView.setPlayer(mPlayerViewModel.getPlayer());
+
+        } catch (RuntimeException exception) {
+            throw new RuntimeException("Create an instance of RecipeViewModel and PlayerViewModel to use this fragment", exception);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPlayerViewModel.stop();
     }
 
     /**
@@ -85,9 +106,14 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
      */
     public void render(RecipeState state) {
         Step step = state.getRecipe().getSteps().get(state.getCurrentStepIndex());
-        mDescriptionTextView.setText(step.getDescription());
-        mNextButton.setEnabled(state.hasNext());
-        mPreviousButton.setEnabled(state.hasPrevious());
+        if (mDescriptionTextView != null && mNextButton != null && mPreviousButton != null) {
+            mDescriptionTextView.setText(step.getDescription());
+            mNextButton.setEnabled(state.hasNext());
+            mPreviousButton.setEnabled(state.hasPrevious());
+        }
+
+        Uri uri = Uri.parse(step.getVideoURL());
+        mPlayerViewModel.setVideo(uri);
     }
 
     /**
@@ -129,6 +155,21 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
         }
 
         return bundle.getInt(KEY_NAVIGATION_VISIBILITY);
+    }
+
+    /**
+     * Gets if this fragment is in two pane mode from the bundle passed to this fragment
+     *
+     * @return if the two pane mode is being used
+     */
+    public boolean isInTwoPaneMode() {
+        Bundle bundle = getArguments();
+
+        if (bundle == null || !bundle.containsKey(KEY_TWO_PANE_MODE)) {
+            throw new IllegalArgumentException("Two pane mode configuration not provided");
+        }
+
+        return bundle.getBoolean(KEY_TWO_PANE_MODE);
     }
 
 }

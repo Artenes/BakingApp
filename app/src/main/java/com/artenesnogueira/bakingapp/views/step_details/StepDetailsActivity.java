@@ -10,11 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.artenesnogueira.bakingapp.R;
 import com.artenesnogueira.bakingapp.model.Recipe;
-import com.artenesnogueira.bakingapp.model.Step;
+import com.artenesnogueira.bakingapp.views.PlayerViewModel;
 import com.artenesnogueira.bakingapp.views.RecipeViewModel;
 import com.artenesnogueira.bakingapp.views.RecipeViewModelFactory;
-
-import java.util.List;
 
 /**
  * Activity to display the details of a step
@@ -52,10 +50,11 @@ public class StepDetailsActivity extends AppCompatActivity {
 
         RecipeViewModelFactory factory = new RecipeViewModelFactory(recipe, index);
         ViewModelProviders.of(this, factory).get(RecipeViewModel.class);
+        ViewModelProviders.of(this).get(PlayerViewModel.class);
 
-        StepDetailsFragment fragment = StepDetailsFragment.create(true);
+        StepDetailsFragment fragment = StepDetailsFragment.create(true, false);
         FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().add(R.id.fm_step_details, fragment).commit();
+        manager.beginTransaction().replace(R.id.fm_step_details, fragment).commit();
     }
 
     /**

@@ -52,7 +52,7 @@ public class StepsActivity extends AppCompatActivity {
         //by just instantiating them, we are setting up all fragments and other details
         //to start interacting with the screen
         if (isDoublePaneLayout) {
-            new StepDetailsTwoPaneView(viewModel, getSupportFragmentManager());
+            new StepDetailsTwoPaneView(this, viewModel, getSupportFragmentManager());
         } else {
             new StepDetailsOnePaneView(this, viewModel, getSupportFragmentManager());
         }

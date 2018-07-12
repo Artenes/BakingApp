@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".views.steps.StepsActivity" />
-        <activity android:name=".views.step_details.StepDetailsActivity"></activity>
+        <activity android:name=".views.step_details.StepDetailsActivity"/>
     </application>
 
 </manifest>

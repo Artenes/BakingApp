@@ -1,6 +1,8 @@
 package com.artenesnogueira.bakingapp.views;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 
 import com.artenesnogueira.bakingapp.R;
 import com.artenesnogueira.bakingapp.model.Step;
@@ -15,21 +17,24 @@ public class StepDetailsTwoPaneView implements StepsAdapter.OnStepClicked {
 
     private final RecipeViewModel viewModel;
 
-    public StepDetailsTwoPaneView(RecipeViewModel viewModel, FragmentManager fragmentManager) {
+    public StepDetailsTwoPaneView(AppCompatActivity activity, RecipeViewModel viewModel, FragmentManager fragmentManager) {
 
         this.viewModel = viewModel;
 
-        //in the two pane layout we use two fragment
+        //creates the player view model to be used by the step details fragment
+        ViewModelProviders.of(activity).get(PlayerViewModel.class);
+
+        //in the two pane layout we use two fragments
         StepsFragment stepsFragment = new StepsFragment();
-        StepDetailsFragment detailsFragment = StepDetailsFragment.create(false);
+        StepDetailsFragment detailsFragment = StepDetailsFragment.create(false, true);
 
         //the steps fragment requires to set what happens when a step is clicked
         //since this logic changes from one to two pane layout
         stepsFragment.setOnStepClicked(this);
 
         fragmentManager.beginTransaction()
-                .add(R.id.fl_steps, stepsFragment)
-                .add(R.id.fl_step_details, detailsFragment)
+                .replace(R.id.fl_steps, stepsFragment)
+                .replace(R.id.fl_step_details, detailsFragment)
                 .commit();
 
     }

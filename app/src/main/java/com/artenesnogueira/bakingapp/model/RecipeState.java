@@ -11,10 +11,6 @@ public class RecipeState {
     private final Recipe recipe;
     private final int currentStepIndex;
 
-    public static RecipeState makeDisplayState(@NonNull Recipe recipe) {
-        return new RecipeState(recipe, 0);
-    }
-
     public static RecipeState makeDisplayState(@NonNull Recipe recipe, int stepIndex) {
         int size = recipe.getSteps().size();
         if (stepIndex < 0 || stepIndex > size) {

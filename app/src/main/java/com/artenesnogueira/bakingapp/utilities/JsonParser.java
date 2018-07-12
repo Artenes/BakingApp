@@ -1,7 +1,6 @@
 package com.artenesnogueira.bakingapp.utilities;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
 

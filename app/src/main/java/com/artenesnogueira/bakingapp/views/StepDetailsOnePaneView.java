@@ -14,8 +14,8 @@ import com.artenesnogueira.bakingapp.views.steps.StepsFragment;
  */
 public class StepDetailsOnePaneView implements StepsAdapter.OnStepClicked {
 
-    private RecipeViewModel viewModel;
-    private Context context;
+    private final RecipeViewModel viewModel;
+    private final Context context;
 
     public StepDetailsOnePaneView(Context context, RecipeViewModel viewModel, FragmentManager fragmentManager) {
         this.context = context;
@@ -23,7 +23,7 @@ public class StepDetailsOnePaneView implements StepsAdapter.OnStepClicked {
 
         StepsFragment fragment = new StepsFragment();
         fragment.setOnStepClicked(this);
-        fragmentManager.beginTransaction().add(R.id.fl_details_container, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.fl_details_container, fragment).commit();
     }
 
     @Override
