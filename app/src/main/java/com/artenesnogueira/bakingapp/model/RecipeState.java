@@ -14,7 +14,7 @@ public class RecipeState {
     public static RecipeState makeDisplayState(@NonNull Recipe recipe, int stepIndex) {
         int size = recipe.getSteps().size();
         if (stepIndex < 0 || stepIndex > size) {
-            throw new IndexOutOfBoundsException("Invalid index for steps list, index: " + stepIndex + ", size: " + size);
+           throw new IndexOutOfBoundsException("Invalid index for steps list, index: " + stepIndex + ", size: " + size);
         }
         return new RecipeState(recipe, stepIndex);
     }

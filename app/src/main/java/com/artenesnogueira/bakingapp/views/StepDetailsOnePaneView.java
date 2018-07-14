@@ -6,13 +6,13 @@ import android.support.v4.app.FragmentManager;
 import com.artenesnogueira.bakingapp.R;
 import com.artenesnogueira.bakingapp.model.Step;
 import com.artenesnogueira.bakingapp.views.step_details.StepDetailsActivity;
-import com.artenesnogueira.bakingapp.views.steps.StepsAdapter;
+import com.artenesnogueira.bakingapp.views.steps.IngredientsAndStepsAdapter;
 import com.artenesnogueira.bakingapp.views.steps.StepsFragment;
 
 /**
  * Layout for one pane view for step details view.
  */
-public class StepDetailsOnePaneView implements StepsAdapter.OnStepClicked {
+public class StepDetailsOnePaneView implements IngredientsAndStepsAdapter.OnStepClicked {
 
     private final RecipeViewModel viewModel;
     private final Context context;
@@ -27,8 +27,9 @@ public class StepDetailsOnePaneView implements StepsAdapter.OnStepClicked {
     }
 
     @Override
-    public void onStepClicked(Step step, int index) {
+    public void onStepClicked(Step step) {
         //define that when a step is clicked, a new activity will be open
+        int index = viewModel.getSteps().indexOf(step);
         StepDetailsActivity.start(context, viewModel.getRecipe(), index);
     }
 

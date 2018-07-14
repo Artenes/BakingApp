@@ -13,14 +13,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".views.recipes.RecipesActivity">
+
+        <activity android:name=".views.recipes.RecipesActivity" android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".views.steps.StepsActivity" />
+
+        <activity android:name=".views.steps.StepsActivity" android:parentActivityName=".views.recipes.RecipesActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".views.recipes.RecipesActivity"/>
+        </activity>
+
         <activity android:name=".views.step_details.StepDetailsActivity" />
 
         <receiver android:name=".widget.IngredientsWidgetProvider">

@@ -18,26 +18,25 @@ import com.artenesnogueira.bakingapp.model.Recipe;
 import com.artenesnogueira.bakingapp.model.RecipeState;
 import com.artenesnogueira.bakingapp.model.Step;
 import com.artenesnogueira.bakingapp.views.RecipeViewModel;
-import com.artenesnogueira.bakingapp.views.steps.StepsAdapter;
 
 /**
  * Fragment to display a list of steps
  */
-public class StepsFragment extends Fragment implements StepsAdapter.OnStepClicked {
+public class StepsFragment extends Fragment implements IngredientsAndStepsAdapter.OnStepClicked {
 
     @NonNull
-    private StepsAdapter.OnStepClicked mOnStepClickedListener = this;
-    private TextView mIngredientsTextView;
+    private IngredientsAndStepsAdapter.OnStepClicked mOnStepClickedListener = this;
     private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private StepsAdapter mAdapter;
+    private GridLayoutManager mLayoutManager;
+    private IngredientsAndStepsAdapter mAdapter;
+    private int mColumnsCount;
+    private RecipeViewModel mViewModel;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_recipe_details, container, false);
+        View view = inflater.inflate(R.layout.fragment_steps, container, false);
 
-        mIngredientsTextView = view.findViewById(R.id.txv_ingredients);
         mRecyclerView = view.findViewById(R.id.rv_steps);
 
         return view;
@@ -47,8 +46,10 @@ public class StepsFragment extends Fragment implements StepsAdapter.OnStepClicke
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mLayoutManager = new GridLayoutManager(getActivity(), 1);
-        mAdapter = new StepsAdapter(mOnStepClickedListener);
+        mColumnsCount = getActivity().getResources().getInteger(R.integer.recipes_columns);
+        mLayoutManager = new GridLayoutManager(getActivity(), mColumnsCount);
+        mLayoutManager.setSpanSizeLookup(mSpanSizeLookup);
+        mAdapter = new IngredientsAndStepsAdapter(getActivity(), mOnStepClickedListener);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -56,11 +57,16 @@ public class StepsFragment extends Fragment implements StepsAdapter.OnStepClicke
         //we expect that the activity that is using this frgaments creates an instance
         //if RecipeViewModel so this fragment can have access to the data to display
         try {
-            RecipeViewModel viewModel = ViewModelProviders.of(getActivity()).get(RecipeViewModel.class);
-            viewModel.getState().observe(getActivity(), this::render);
+            mViewModel = ViewModelProviders.of(getActivity()).get(RecipeViewModel.class);
         } catch (RuntimeException exception) {
             throw new RuntimeException("Create an instance of RecipeViewModel to use this fragment", exception);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mViewModel.getState().observe(getActivity(), this::render);
     }
 
     /**
@@ -69,7 +75,7 @@ public class StepsFragment extends Fragment implements StepsAdapter.OnStepClicke
      *
      * @param onStepClicked the OnStepClicked implementation
      */
-    public void setOnStepClicked(@NonNull StepsAdapter.OnStepClicked onStepClicked) {
+    public void setOnStepClicked(@NonNull IngredientsAndStepsAdapter.OnStepClicked onStepClicked) {
         mOnStepClickedListener = onStepClicked;
     }
 
@@ -81,21 +87,35 @@ public class StepsFragment extends Fragment implements StepsAdapter.OnStepClicke
     public void render(RecipeState state) {
         Recipe recipe = state.getRecipe();
 
-        mAdapter.setData(recipe.getSteps());
+        mAdapter.setData(recipe);
 
-        for (Ingredient ingredient : recipe.getIngredients()) {
-            mIngredientsTextView.setText("");
-            mIngredientsTextView.append(ingredient.getIngredient());
-            mIngredientsTextView.append(",");
-        }
+        getActivity().setTitle(state.getRecipe().getName());
     }
 
     @Override
-    public void onStepClicked(Step step, int index) {
-        //since is not possible to passa an implementation of StepsAdapter.OnStepClicked
+    public void onStepClicked(Step step) {
+        //since is not possible to passa an implementation of IngredientsAndStepsAdapter.OnStepClicked
         //right when this fragment is created, we make sure that an exception is thrown
         //if we forget to set the adapter
         throw new RuntimeException("onStepClicked not set in fragment");
     }
+
+    /**
+     * Lookup to define when an item in the list should spam to multiple columns or not
+     */
+    private final GridLayoutManager.SpanSizeLookup mSpanSizeLookup = new GridLayoutManager.SpanSizeLookup() {
+        @Override
+        public int getSpanSize(int position) {
+
+            int viewTytpe = mAdapter.getItemViewType(position);
+
+            if (viewTytpe == IngredientsAndStepsAdapter.TITLE_VIEW_TYTPE || viewTytpe == IngredientsAndStepsAdapter.STEP_VIEW_TYTPE) {
+                return mColumnsCount;
+            }
+
+            return 1;
+
+        }
+    };
 
 }
