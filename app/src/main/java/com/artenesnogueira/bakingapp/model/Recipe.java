@@ -18,6 +18,7 @@ public class Recipe implements Parcelable {
     private final List<Step> steps;
     private int servings;
     private String image = "";
+    private boolean isOnWidget;
 
     public Recipe() {
         ingredients = new ArrayList<>(0);
@@ -46,6 +47,18 @@ public class Recipe implements Parcelable {
 
     public String getImage() {
         return image;
+    }
+
+    public boolean isOnWidget() {
+        return isOnWidget;
+    }
+
+    public boolean hasImage() {
+        return !image.isEmpty();
+    }
+
+    public void setOnWidget(boolean isOnWidget) {
+        this.isOnWidget = isOnWidget;
     }
 
     /**

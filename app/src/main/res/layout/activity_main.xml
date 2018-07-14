@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/recipes_list"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".views.recipes.RecipesActivity"/>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ProgressBar
+        android:id="@+id/pb_loading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:id="@+id/tv_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/something_went_wrong_tap_to_try_again"
+        android:textSize="16sp"
+        android:fontFamily="monospace"
+        android:layout_gravity="center"
+        android:drawableTop="@drawable/ic_error_outline_black_24dp"
+        android:textAlignment="center"/>
+
+    <android.support.v7.widget.RecyclerView
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/recipes_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".views.recipes.RecipesActivity"/>
+
+</merge>

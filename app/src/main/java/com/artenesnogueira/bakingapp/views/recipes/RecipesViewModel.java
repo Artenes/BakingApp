@@ -9,6 +9,7 @@ import android.content.ComponentName;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
+import com.artenesnogueira.bakingapp.R;
 import com.artenesnogueira.bakingapp.model.Recipe;
 import com.artenesnogueira.bakingapp.model.RecipesState;
 import com.artenesnogueira.bakingapp.provider.IngredientsRepository;
@@ -27,33 +28,57 @@ import java.util.List;
 public class RecipesViewModel extends AndroidViewModel {
 
     private final MutableLiveData<RecipesState> mState;
-    private final IngredientsRepository mRepository;
+    private final IngredientsRepository mIngredientsRepository;
+    private final RecipesRepository mRecipesRespository;
 
     public RecipesViewModel(@NonNull Application application) {
         super(application);
-        mRepository = new IngredientsRepository(SharedPreferencesIndex.getForIngredients(application), new JsonParser());
+        mIngredientsRepository = new IngredientsRepository(SharedPreferencesIndex.getForIngredients(application), new JsonParser());
+        mRecipesRespository = new RecipesRepository(new HttpClient(), new JsonParser(), mIngredientsRepository);
         mState = new MutableLiveData<>();
-        mState.setValue(RecipesState.makeLoadingState());
-        RecipesRepository repository = new RecipesRepository(new HttpClient(), new JsonParser());
-        new LoadRecipesTask(repository, mState).execute();
+        reload();
     }
 
     public LiveData<RecipesState> getState() {
         return mState;
     }
 
-    public void setRecipeToWidget(Recipe recipe){
+    public void reload() {
+        mState.setValue(RecipesState.makeLoadingState());
+        new LoadRecipesTask(mRecipesRespository, mState).execute();
+    }
+
+    public void setRecipeToWidget(Recipe recipeToWidget){
+        List<Recipe> currentRecipes = mState.getValue().getRecipes();
+
+        //save the recipe in the repository
         try {
-            mRepository.set(recipe.createResumedRecipe());
+            mIngredientsRepository.set(recipeToWidget.createResumedRecipe());
         } catch (IOException exception) {
             exception.printStackTrace();
         }
 
+        //update the widgets
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplication());
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(getApplication(), IngredientsWidgetProvider.class));
         for (int id : appWidgetIds) {
-            IngredientsWidgetProvider.updateAppWidget(getApplication(), appWidgetManager, id, mRepository);
+            IngredientsWidgetProvider.updateAppWidget(getApplication(), appWidgetManager, id, mIngredientsRepository);
         }
+
+        //update previous recipe on widget to not be on the widget anymore
+        for (Recipe recipe : currentRecipes) {
+            if (recipe.isOnWidget()) {
+                recipe.setOnWidget(false);
+                break;
+            }
+        }
+
+        //update the recipe to be on the widget
+        recipeToWidget.setOnWidget(true);
+
+        //update the ui
+        String message = getApplication().getResources().getString(R.string.recipe_added_to_widget);
+        mState.setValue(RecipesState.makeErrorState().makeAddRecipeToWidget(currentRecipes, message));
     }
 
     static class LoadRecipesTask extends AsyncTask<Void, Void, RecipesState> {

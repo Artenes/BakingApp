@@ -2,4 +2,9 @@
     <string name="app_name">Baking App</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+    <string name="recipe_image_content_description">Image of the finished recipe</string>
+    <string name="add_to_widget_content_description">Add to widget</string>
+    <string name="servings">%1$d servings</string>
+    <string name="recipe_added_to_widget">Recipe added to widget</string>
+    <string name="something_went_wrong_tap_to_try_again">Something went wrong\n<u>Tap to try again</u></string>
 </resources>
