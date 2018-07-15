@@ -22,13 +22,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".views.steps.StepsActivity" android:parentActivityName=".views.recipes.RecipesActivity">
+        <activity android:name=".views.steps.StepsActivity" android:parentActivityName=".views.recipes.RecipesActivity" android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".views.recipes.RecipesActivity"/>
         </activity>
 
-        <activity android:name=".views.step_details.StepDetailsActivity" />
+        <activity android:name=".views.step_details.StepDetailsActivity" android:parentActivityName=".views.steps.StepsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".views.steps.StepsActivity"/>
+        </activity>
 
         <receiver android:name=".widget.IngredientsWidgetProvider">
             <intent-filter>

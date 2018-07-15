@@ -28,11 +28,22 @@ public class Step implements Parcelable {
     }
 
     public String getVideoURL() {
+        String url = videoURL;
+        if (url.isEmpty()) {
+            url = thumbnailURL;
+        }
+        if (url.endsWith(".mp4")) {
+            return url;
+        }
         return videoURL;
     }
 
     public String getThumbnailURL() {
         return thumbnailURL;
+    }
+
+    public boolean hasVideo() {
+        return !getVideoURL().isEmpty();
     }
 
     private Step(Parcel in) {

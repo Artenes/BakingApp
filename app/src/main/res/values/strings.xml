@@ -12,4 +12,7 @@
     <string name="ingredients">Ingredients</string>
     <string name="steps">Steps</string>
     <string name="step_with_number"><b>#%1$d</b> %2$s</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="video_not_available">Video not available</string>
 </resources>

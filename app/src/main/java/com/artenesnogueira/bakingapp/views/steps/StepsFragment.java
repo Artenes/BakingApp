@@ -46,7 +46,7 @@ public class StepsFragment extends Fragment implements IngredientsAndStepsAdapte
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mColumnsCount = getActivity().getResources().getInteger(R.integer.recipes_columns);
+        mColumnsCount = getActivity().getResources().getInteger(R.integer.ingredients_columns);
         mLayoutManager = new GridLayoutManager(getActivity(), mColumnsCount);
         mLayoutManager.setSpanSizeLookup(mSpanSizeLookup);
         mAdapter = new IngredientsAndStepsAdapter(getActivity(), mOnStepClickedListener);

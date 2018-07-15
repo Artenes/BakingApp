@@ -2,5 +2,6 @@
 <resources>
 
     <integer name="recipes_columns">1</integer>
+    <integer name="ingredients_columns">1</integer>
 
 </resources>

@@ -28,6 +28,8 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
     private static final String KEY_TWO_PANE_MODE = "TWO_PANE_MODE";
 
     private SimpleExoPlayerView mPlayerView;
+    private TextView mVideoNotAvailableTextView;
+    private TextView mTitleTextView;
     private TextView mDescriptionTextView;
     private Button mNextButton;
     private Button mPreviousButton;
@@ -58,11 +60,13 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
         View view = inflater.inflate(layout, container, false);
 
         mPlayerView = view.findViewById(R.id.player);
+        mVideoNotAvailableTextView = view.findViewById(R.id.tv_video_not_available);
         mDescriptionTextView = view.findViewById(R.id.tv_description);
+        mTitleTextView = view.findViewById(R.id.tv_title);
         mNextButton = view.findViewById(R.id.btn_next);
         mPreviousButton = view.findViewById(R.id.btn_previous);
 
-        if (mNextButton != null && mPreviousButton != null) {
+        if (!isDisplayingOnlyVideoPlayer()) {
             mNextButton.setOnClickListener(this);
             mPreviousButton.setOnClickListener(this);
 
@@ -83,14 +87,17 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
         //if RecipeViewModel so this fragment can have access to the data to display
         try {
             mViewModel = ViewModelProviders.of(getActivity()).get(RecipeViewModel.class);
-            mViewModel.getState().observe(this, this::render);
-
             mPlayerViewModel = ViewModelProviders.of(getActivity()).get(PlayerViewModel.class);
-            mPlayerView.setPlayer(mPlayerViewModel.getPlayer());
-
         } catch (RuntimeException exception) {
             throw new RuntimeException("Create an instance of RecipeViewModel and PlayerViewModel to use this fragment", exception);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mViewModel.getState().observe(this, this::render);
+        mPlayerView.setPlayer(mPlayerViewModel.getPlayer());
     }
 
     @Override
@@ -106,14 +113,25 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
      */
     public void render(RecipeState state) {
         Step step = state.getRecipe().getSteps().get(state.getCurrentStepIndex());
-        if (mDescriptionTextView != null && mNextButton != null && mPreviousButton != null) {
+        if (!isDisplayingOnlyVideoPlayer()) {
             mDescriptionTextView.setText(step.getDescription());
             mNextButton.setEnabled(state.hasNext());
             mPreviousButton.setEnabled(state.hasPrevious());
+            mTitleTextView.setText(step.getShortDescription());
+        }
+
+        if (step.hasVideo()) {
+            mPlayerView.setVisibility(View.VISIBLE);
+            mVideoNotAvailableTextView.setVisibility(View.GONE);
+        } else {
+            mPlayerView.setVisibility(View.GONE);
+            mVideoNotAvailableTextView.setVisibility(View.VISIBLE);
         }
 
         Uri uri = Uri.parse(step.getVideoURL());
         mPlayerViewModel.setVideo(uri);
+
+        getActivity().setTitle(state.getRecipe().getName());
     }
 
     /**
@@ -170,6 +188,21 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
         }
 
         return bundle.getBoolean(KEY_TWO_PANE_MODE);
+    }
+
+    /**
+     * Checks if only the video player is being displayed
+     * this happens when the device is in landscape
+     *
+     * @return either if only the video is being displayed
+     */
+    public boolean isDisplayingOnlyVideoPlayer() {
+
+        return mDescriptionTextView == null &&
+                mTitleTextView == null &&
+                mNextButton == null &&
+                mPreviousButton == null;
+
     }
 
 }
