@@ -10,10 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.artenesnogueira.bakingapp.R;
-import com.artenesnogueira.bakingapp.model.Ingredient;
 import com.artenesnogueira.bakingapp.model.Recipe;
 import com.artenesnogueira.bakingapp.model.RecipeState;
 import com.artenesnogueira.bakingapp.model.Step;

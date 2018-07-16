@@ -10,7 +10,6 @@ import android.support.test.runner.lifecycle.Stage;
 
 import com.artenesnogueira.bakingapp.views.recipes.RecipesActivity;
 
-import org.junit.Assume;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +28,7 @@ import static org.hamcrest.Matchers.not;
  * Usually there is test for each screen, but since this app is very simples
  * is not worth it creating different tests for each one, just one class
  * is enough to hold all basic test cases.
- *
+ * <p>
  * All tests must be run with the device in portrait
  */
 @RunWith(AndroidJUnit4.class)
@@ -100,9 +99,9 @@ public class ApplicationFlowTest {
 
         onView(withId(R.id.recipes_list)).perform(actionOnItemAtPosition(FIRST_RECIPE, click()));
 
-        mActivityRule.getActivity().runOnUiThread(() -> {
-            getCurrentActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        });
+        mActivityRule.getActivity().runOnUiThread(() ->
+            getCurrentActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
+        );
 
         onView(withId(R.id.rv_steps)).perform(actionOnItemAtPosition(FIRST_STEP, click()));
         onView(withId(R.id.tv_description)).check(matches(withText("Recipe Introduction")));

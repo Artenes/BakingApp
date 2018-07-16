@@ -78,7 +78,7 @@ public class RecipesViewModel extends AndroidViewModel {
 
         //update the ui
         String message = getApplication().getResources().getString(R.string.recipe_added_to_widget);
-        mState.setValue(RecipesState.makeErrorState().makeAddRecipeToWidget(currentRecipes, message));
+        mState.setValue(RecipesState.makeAddRecipeToWidget(currentRecipes, message));
     }
 
     static class LoadRecipesTask extends AsyncTask<Void, Void, RecipesState> {
