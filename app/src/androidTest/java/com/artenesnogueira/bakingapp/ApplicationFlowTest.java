@@ -28,12 +28,15 @@ import static org.hamcrest.Matchers.not;
 /**
  * Usually there is test for each screen, but since this app is very simples
  * is not worth it creating different tests for each one, just one class
- * is enough to hold all basic test cases
+ * is enough to hold all basic test cases.
+ *
+ * All tests must be run with the device in portrait
  */
 @RunWith(AndroidJUnit4.class)
 public class ApplicationFlowTest {
 
     private static final int FIRST_RECIPE = 0;
+    private static final int FIRST_STEP = 11;
     private static final int SECOND_STEP = 12;
 
     @Rule
@@ -56,9 +59,9 @@ public class ApplicationFlowTest {
     @Test
     public void itDisplaysTheStepDetailsAndVideo() {
         onView(withId(R.id.recipes_list)).perform(actionOnItemAtPosition(FIRST_RECIPE, click()));
-        onView(withId(R.id.rv_steps)).perform(actionOnItemAtPosition(SECOND_STEP, click()));
+        onView(withId(R.id.rv_steps)).perform(actionOnItemAtPosition(FIRST_STEP, click()));
 
-        onView(withId(R.id.tv_description)).check(matches(withText("1. Preheat the oven to 350°F. Butter a 9\" deep dish pie pan.")));
+        onView(withId(R.id.tv_description)).check(matches(withText("Recipe Introduction")));
         onView(withId(R.id.exo_overlay)).check(matches(isDisplayed()));
     }
 
@@ -92,7 +95,7 @@ public class ApplicationFlowTest {
     }
 
     @Test
-    public void itDisplayesStepsDetailsInTabletLandscape() {
+    public void itDisplaysStepsDetailsInTabletLandscape() {
         //test fails on small devices
 
         onView(withId(R.id.recipes_list)).perform(actionOnItemAtPosition(FIRST_RECIPE, click()));
@@ -101,8 +104,8 @@ public class ApplicationFlowTest {
             getCurrentActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         });
 
-        onView(withId(R.id.rv_steps)).perform(actionOnItemAtPosition(SECOND_STEP, click()));
-        onView(withId(R.id.tv_description)).check(matches(withText("1. Preheat the oven to 350°F. Butter a 9\" deep dish pie pan.")));
+        onView(withId(R.id.rv_steps)).perform(actionOnItemAtPosition(FIRST_STEP, click()));
+        onView(withId(R.id.tv_description)).check(matches(withText("Recipe Introduction")));
         onView(withId(R.id.exo_overlay)).check(matches(isDisplayed()));
         onView(withId(R.id.btn_next)).check(matches(not(isDisplayed())));
         onView(withId(R.id.btn_previous)).check(matches(not(isDisplayed())));
