@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.widget.RemoteViews;
 
 import com.artenesnogueira.bakingapp.R;
@@ -33,30 +34,32 @@ public class IngredientsWidgetProvider extends AppWidgetProvider {
      * @param repository       the repository from where the recipes will be recovered
      */
     public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId, IngredientsRepository repository) {
-        String name = "--";
 
         try {
+
+            Resources resources = context.getResources();
             ResumedRecipe recipe = repository.get();
-            name = recipe.getName();
+            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ingredients_widget);
+
+            views.setTextViewText(R.id.tv_recipe, recipe.hasName() ? recipe.getName() : resources.getString(R.string.no_recipe));
+
+            Intent intent = new Intent(context, IngredientsListViewService.class);
+            views.setRemoteAdapter(R.id.lv_ingredients, intent);
+
+            Intent appIntent = new Intent(context, RecipesActivity.class);
+            PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            views.setOnClickPendingIntent(R.id.btn_choose, appPendingIntent);
+
+            views.setEmptyView(R.id.lv_ingredients, R.id.empty_view);
+
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.lv_ingredients);
+
+            appWidgetManager.updateAppWidget(appWidgetId, views);
+
         } catch (IOException exception) {
             exception.printStackTrace();
         }
 
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ingredients_widget);
-        views.setTextViewText(R.id.tv_recipe, name);
-
-        Intent intent = new Intent(context, IngredientsListViewService.class);
-        views.setRemoteAdapter(R.id.lv_ingredients, intent);
-
-        Intent appIntent = new Intent(context, RecipesActivity.class);
-        PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        views.setOnClickPendingIntent(R.id.btn_choose, appPendingIntent);
-
-        views.setEmptyView(R.id.lv_ingredients, R.id.empty_view);
-
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.lv_ingredients);
-
-        appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
     @Override

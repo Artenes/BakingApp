@@ -1,6 +1,7 @@
 package com.artenesnogueira.bakingapp.widget;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -46,12 +47,14 @@ public class IngredientsListViewFactory implements RemoteViewsService.RemoteView
 
     @Override
     public RemoteViews getViewAt(int position) {
+        Resources resources = mContext.getResources();
+
         Ingredient ingredient = mResumedRecipe.getIngredients().get(position);
 
         RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.ingredient_line);
 
         views.setTextViewText(R.id.tv_ingredient, ingredient.getIngredient());
-        views.setTextViewText(R.id.tv_quantity, ingredient.getQuantity() + "X" + ingredient.getMeasure());
+        views.setTextViewText(R.id.tv_quantity, resources.getString(R.string.quantity_times_measure, ingredient.getQuantity(), ingredient.getMeasure()));
 
         return views;
     }

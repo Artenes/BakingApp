@@ -15,4 +15,7 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="video_not_available">Video not available</string>
+    <string name="change_recipe">Change recipe</string>
+    <string name="select_recipe">Select recipe to display ingredients</string>
+    <string name="no_recipe">No recipe</string>
 </resources>

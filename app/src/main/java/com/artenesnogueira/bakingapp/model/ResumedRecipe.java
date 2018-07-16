@@ -37,4 +37,8 @@ public class ResumedRecipe {
         return ingredients;
     }
 
+    public boolean hasName() {
+        return !name.isEmpty();
+    }
+
 }
