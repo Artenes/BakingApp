@@ -16,6 +16,7 @@ import java.util.List;
 public class RecipeViewModel extends ViewModel {
 
     private final MutableLiveData<RecipeState> mState;
+    private int mCurrentListIndex;
 
     public RecipeViewModel(Recipe recipe, int currentStepIndex) {
         mState = new MutableLiveData<>();
@@ -79,6 +80,14 @@ public class RecipeViewModel extends ViewModel {
             return;
         }
         goToStep(state.getPreviousStepIndex());
+    }
+
+    public void setListIndex(int listIndex) {
+        mCurrentListIndex = listIndex;
+    }
+
+    public int getListIndex() {
+        return mCurrentListIndex;
     }
 
 }

@@ -67,6 +67,12 @@ public class StepsFragment extends Fragment implements IngredientsAndStepsAdapte
         mViewModel.getState().observe(getActivity(), this::render);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        mViewModel.setListIndex(mLayoutManager.findFirstCompletelyVisibleItemPosition());
+    }
+
     /**
      * Sets the callback to be used when a step is clicked. If none is set,
      * this fragment will throw an exception when an item is clicked.
@@ -86,6 +92,7 @@ public class StepsFragment extends Fragment implements IngredientsAndStepsAdapte
         Recipe recipe = state.getRecipe();
 
         mAdapter.setData(recipe);
+        mRecyclerView.scrollToPosition(mViewModel.getListIndex());
 
         getActivity().setTitle(state.getRecipe().getName());
     }
