@@ -46,6 +46,12 @@ public class Step implements Parcelable {
         return !getVideoURL().isEmpty();
     }
 
+    public boolean hasThumbnail() {
+        String url = getThumbnailURL();
+        return !url.isEmpty() &&
+                (url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".png"));
+    }
+
     private Step(Parcel in) {
         id = in.readInt();
         shortDescription = in.readString();

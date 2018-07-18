@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.artenesnogueira.bakingapp.R;
@@ -13,6 +14,7 @@ import com.artenesnogueira.bakingapp.model.Ingredient;
 import com.artenesnogueira.bakingapp.model.ListSectionTitle;
 import com.artenesnogueira.bakingapp.model.Recipe;
 import com.artenesnogueira.bakingapp.model.Step;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -160,10 +162,12 @@ public class IngredientsAndStepsAdapter extends RecyclerView.Adapter {
     class StepsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         final TextView description;
+        final ImageView thumbnailImageView;
 
         StepsViewHolder(View itemView) {
             super(itemView);
             description = itemView.findViewById(R.id.txv_description);
+            thumbnailImageView = itemView.findViewById(R.id.iv_thumbnail);
         }
 
         void bind(Step step) {
@@ -172,6 +176,9 @@ public class IngredientsAndStepsAdapter extends RecyclerView.Adapter {
                     : resources.getString(R.string.step_with_number, step.getId(), step.getShortDescription());
             description.setText(shortDescription);
             itemView.setOnClickListener(this);
+            if (step.hasThumbnail()) {
+                Picasso.get().load(step.getThumbnailURL()).into(thumbnailImageView);
+            }
         }
 
         @Override
