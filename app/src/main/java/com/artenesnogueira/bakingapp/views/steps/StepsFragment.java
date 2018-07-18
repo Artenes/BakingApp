@@ -92,9 +92,14 @@ public class StepsFragment extends Fragment implements IngredientsAndStepsAdapte
         Recipe recipe = state.getRecipe();
 
         mAdapter.setData(recipe);
-        mRecyclerView.scrollToPosition(mViewModel.getListIndex());
 
         getActivity().setTitle(state.getRecipe().getName());
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        mRecyclerView.scrollToPosition(mViewModel.getListIndex());
     }
 
     @Override
