@@ -1,8 +1,37 @@
 # Baking App
 
+![Cover image](screenshots/cover.jpg)
+
+<a href='https://play.google.com/store/apps/details?id=com.artenesnogueira.bakingapp&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="200px" /></a>
+
 Android application to display a list of recipes from a network resource and allow navigation between recipes and steps to prepare the recipe. It also uses [exoplayer](http://google.github.io/ExoPlayer/) to play videos for some of the recipe's steps.
 
-This is a project made for the [Android Developer Nanodegree from Udacity](https://br.udacity.com/course/android-developer-nanodegree-by-google--nd801).
+# Features
+
+- Displays a list of recipes from a network resource
+- Displays the ingredients and steps for a recipe
+- In a tablet in landscape the layout changes to a master-detail layout
+- Displays the details of a step and allow navigation between them
+- Shows a video in fullscreen when device is in landscape
+- Has a widget to display the list of ingredients of a recipe
+- Uses fragments for a responsive layout
+
+# Screenshots
+
+<p float="left" align="center">
+  <img src="screenshots/home_screen.png" width="300px" />
+  <img src="screenshots/recipe_ingredients_and_steps.png" width="300px" /> 
+</p>
+
+<p float="left" align="center">
+  <img src="screenshots/recipe_master_detail.png" width="300px" />
+  <img src="screenshots/step_details.png" width="300px" /> 
+</p>
+
+<p float="left" align="center">
+  <img src="screenshots/step_video_fullscreen.png" width="300px" />
+  <img src="screenshots/homescreen_widget.png" width="300px" /> 
+</p>
 
 # Quick start
 
@@ -13,32 +42,6 @@ git clone https://github.com/Artenes/BakingApp
 ````
 
 And import the project in Android Studio.
-
-# Features
-
-Displays a list of recipes from a network resource
-
-![Home screen](screenshots/home_screen.png)
-
-Displays the ingredients and steps for a recipe
-
-![Recipe's ingredients and steps](screenshots/recipe_ingredients_and_steps.png)
-
-In a tablet in ladscape the layout changes to a master-detail layout
-
-![Master-detail in recipe's ingredients and steps](screenshots/recipe_master_detail.png)
-
-Displays the details of a step and allow navigation between them
-
-![Step details](screenshots/step_details.png)
-
-Shows a video in fullscreen when device is in landscape
-
-![Video in fullscreen in landscape](screenshots/step_video_fullscreen.png)
-
-Has a widget to display the list of ingredients of a recipe
-
-![Widget](screenshots/homescreen_widget.png)
 
 # Credits
 
