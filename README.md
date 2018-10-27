@@ -33,7 +33,7 @@ Android application to display a list of recipes from a network resource and all
   <img src="screenshots/homescreen_widget.png" width="300px" /> 
 </p>
 
-# Quick start
+# Setup
 
 Clone the repository
 
