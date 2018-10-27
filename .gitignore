@@ -1,7 +1,7 @@
 gradle/
 gradlew
 gradlew.bat
-
+app/release/
 # Built application files
 *.apk
 *.ap_
